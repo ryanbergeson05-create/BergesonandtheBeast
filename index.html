@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bergeson &amp; The Beast — Disney Trip Planning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --midnight:#0a0f24;
+    --midnight-2:#161033;
+    --plum:#2e1a47;
+    --rosewood:#7c2d3b;
+    --gold:#e8b94a;
+    --gold-soft:#f2d488;
+    --cream:#f6efe0;
+    --cream-dim:#cfc6ae;
+    --glass:rgba(246,239,224,0.06);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--midnight);
+    color:var(--cream);
+    font-family:'Nunito Sans', sans-serif;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700;
+    letter-spacing:0.01em;
+  }
+  .eyebrow{
+    font-family:'Nunito Sans', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.35em;
+    font-size:0.7rem;
+    color:var(--gold-soft);
+    font-weight:700;
+  }
+  a{color:inherit;}
+  button{font-family:inherit;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 5vw;
+    background:linear-gradient(180deg, rgba(10,15,36,0.92), rgba(10,15,36,0));
+    backdrop-filter:blur(2px);
+  }
+  .brand{
+    font-family:'Cormorant Garamond', serif;
+    font-size:1.4rem;
+    font-weight:700;
+    letter-spacing:0.03em;
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+  }
+  .brand .amp{ color:var(--gold); font-style:italic; }
+  .nav-links{ display:flex; gap:2.2rem; }
+  .nav-links button{
+    background:none; border:none; cursor:pointer;
+    color:var(--cream-dim);
+    font-size:0.85rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    padding:6px 2px;
+    border-bottom:1px solid transparent;
+    transition:color .25s, border-color .25s;
+  }
+  .nav-links button:hover, .nav-links button.active{
+    color:var(--gold-soft);
+    border-color:var(--gold);
+  }
+  @media (max-width:640px){
+    .nav-links{ gap:1rem; }
+    .nav-links button{ font-size:0.68rem; letter-spacing:0.06em;}
+  }
+
+  /* ---------- PAGES ---------- */
+  .page{ display:none; min-height:100vh; }
+  .page.active{ display:block; }
+
+  /* ---------- HERO / HOME ---------- */
+  #hero{
+    position:relative;
+    height:100vh;
+    min-height:640px;
+    overflow:hidden;
+    background:radial-gradient(ellipse at 50% 20%, #1c1440 0%, var(--midnight) 55%, #050812 100%);
+  }
+  #starfield{ position:absolute; inset:0; }
+  .star{
+    position:absolute;
+    background:var(--cream);
+    border-radius:50%;
+    animation:twinkle linear infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{ opacity:0.15; }
+    50%{ opacity:1; }
+  }
+  #fireworks{ position:absolute; inset:0; pointer-events:none; }
+  .spark{
+    position:absolute;
+    border-radius:50%;
+    animation:sparkfade 1.4s ease-out forwards;
+  }
+  @keyframes sparkfade{
+    0%{ transform:translate(0,0) scale(1); opacity:1; }
+    100%{ transform:translate(var(--dx), var(--dy)) scale(0.2); opacity:0; }
+  }
+  .moon{
+    position:absolute; top:8%; right:10%;
+    width:64px; height:64px; border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, #fff8e0, var(--gold-soft) 70%);
+    box-shadow:0 0 60px 12px rgba(232,185,74,0.35);
+  }
+  .hero-content{
+    position:relative; z-index:5;
+    height:100%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding:0 5vw;
+  }
+  .hero-content h1{
+    font-size:clamp(2.6rem, 7vw, 5.2rem);
+    margin:0.4em 0 0.2em;
+    color:var(--cream);
+    text-shadow:0 0 40px rgba(232,185,74,0.25);
+  }
+  .hero-content h1 em{ color:var(--gold-soft); font-style:italic; }
+  .hero-sub{
+    max-width:560px;
+    color:var(--cream-dim);
+    font-size:1.05rem;
+    line-height:1.6;
+    margin-bottom:2rem;
+  }
+  .cta-row{ display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; }
+  .btn{
+    display:inline-block;
+    padding:14px 30px;
+    border-radius:999px;
+    font-size:0.8rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    font-weight:700;
+    cursor:pointer;
+    border:1px solid var(--gold);
+    transition:transform .2s, box-shadow .2s, background .2s;
+  }
+  .btn-solid{ background:var(--gold); color:var(--midnight); }
+  .btn-solid:hover{ transform:translateY(-2px); box-shadow:0 8px 24px rgba(232,185,74,0.35); }
+  .btn-ghost{ background:transparent; color:var(--gold-soft); }
+  .btn-ghost:hover{ background:rgba(232,185,74,0.1); transform:translateY(-2px); }
+
+  /* castle */
+  #castle-wrap{
+    position:absolute; bottom:0; left:0; right:0;
+    display:flex; justify-content:center;
+    z-index:2;
+  }
+  #castle-wrap svg{ width:min(100%, 900px); height:auto; display:block; }
+  .glow-window{ animation:winkflicker 3.4s ease-in-out infinite; }
+  @keyframes winkflicker{
+    0%,100%{ opacity:0.55; }
+    45%{ opacity:1; }
+    55%{ opacity:1; }
+  }
+  .hill{ position:absolute; bottom:0; left:0; right:0; z-index:1; }
+
+  .scroll-cue{
+    position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+    font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase;
+    color:var(--cream-dim); z-index:6; opacity:0.7;
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+  .section{ padding:6.5rem 6vw; max-width:1180px; margin:0 auto; }
+  .section-head{ text-align:center; max-width:640px; margin:0 auto 3rem; }
+  .section-head h2{ font-size:clamp(2rem,4vw,3rem); margin:0.3em 0; }
+  .section-head p{ color:var(--cream-dim); line-height:1.6; }
+
+  /* ---------- PARKS PAGE ---------- */
+  #parks{ background:linear-gradient(180deg, var(--midnight) 0%, #0d0a22 100%); }
+  .park-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(300px,1fr));
+    gap:1.6rem;
+  }
+  .park-card{
+    background:var(--glass);
+    border:1px solid rgba(246,239,224,0.1);
+    border-radius:18px;
+    padding:1.8rem;
+    position:relative;
+    overflow:hidden;
+    transition:transform .25s, border-color .25s;
+  }
+  .park-card:hover{ transform:translateY(-4px); border-color:var(--gold); }
+  .park-card .tag{
+    display:inline-block; font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase;
+    color:var(--rosewood); background:rgba(124,45,59,0.25); border:1px solid rgba(124,45,59,0.5);
+    padding:3px 10px; border-radius:999px; margin-bottom:0.9rem;
+  }
+  .park-card h3{ margin:0 0 0.3rem; font-size:1.5rem; color:var(--gold-soft); }
+  .park-card .loc{ font-size:0.8rem; color:var(--cream-dim); margin-bottom:0.9rem; }
+  .park-card p{ font-size:0.9rem; line-height:1.55; color:var(--cream-dim); margin:0 0 0.9rem; }
+  .price-line{
+    display:flex; justify-content:space-between; align-items:baseline;
+    border-top:1px dashed rgba(246,239,224,0.2);
+    padding-top:0.7rem; font-size:0.85rem;
+  }
+  .price-line .amt{ color:var(--gold); font-weight:800; font-size:1rem; }
+
+  .cruise-block{
+    margin-top:3.5rem;
+    background:linear-gradient(135deg, rgba(46,26,71,0.6), rgba(124,45,59,0.35));
+    border:1px solid rgba(232,185,74,0.25);
+    border-radius:22px;
+    padding:2.4rem clamp(1.4rem,4vw,3rem);
+  }
+  .cruise-block h3{ font-size:2rem; margin-top:0; color:var(--gold-soft); }
+  .cruise-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:1.2rem;
+    margin-top:1.4rem;
+  }
+  .cruise-item{
+    background:rgba(10,15,36,0.4);
+    border-radius:14px;
+    padding:1.1rem 1.3rem;
+  }
+  .cruise-item .len{ font-size:0.75rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--cream-dim); }
+  .cruise-item .range{ font-size:1.35rem; color:var(--gold); font-weight:800; margin:0.2rem 0; }
+  .cruise-item .note{ font-size:0.78rem; color:var(--cream-dim); }
+  .disclaimer{
+    font-size:0.75rem; color:var(--cream-dim); opacity:0.75; margin-top:1.6rem; line-height:1.5;
+  }
+
+  /* ---------- CONTACT PAGE ---------- */
+  #contact{ background:radial-gradient(ellipse at 50% 0%, #1c1440 0%, var(--midnight) 60%); min-height:100vh; }
+  .contact-wrap{
+    display:grid;
+    grid-template-columns:1fr 1.2fr;
+    gap:3rem;
+    align-items:start;
+  }
+  @media (max-width:800px){ .contact-wrap{ grid-template-columns:1fr; } }
+  .contact-info h2{ font-size:2.4rem; margin-bottom:0.6rem; }
+  .contact-info p{ color:var(--cream-dim); line-height:1.7; margin-bottom:1.6rem; }
+  .contact-info .email-pill{
+    display:inline-flex; align-items:center; gap:8px;
+    border:1px solid var(--gold); border-radius:999px;
+    padding:10px 18px; font-size:0.85rem; color:var(--gold-soft);
+  }
+  form{
+    background:var(--glass);
+    border:1px solid rgba(246,239,224,0.12);
+    border-radius:20px;
+    padding:2rem;
+  }
+  .field{ margin-bottom:1.2rem; }
+  .field label{
+    display:block; font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--cream-dim); margin-bottom:0.4rem;
+  }
+  .field input, .field select, .field textarea{
+    width:100%;
+    background:rgba(10,15,36,0.55);
+    border:1px solid rgba(246,239,224,0.2);
+    border-radius:10px;
+    padding:12px 14px;
+    color:var(--cream);
+    font-family:inherit;
+    font-size:0.95rem;
+  }
+  .field textarea{ min-height:110px; resize:vertical; }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:none; border-color:var(--gold);
+  }
+  .row-2{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  @media (max-width:520px){ .row-2{ grid-template-columns:1fr; } }
+  .submit-note{ font-size:0.75rem; color:var(--cream-dim); margin-top:0.9rem; line-height:1.5; }
+  #form-status{ margin-top:0.9rem; font-size:0.85rem; color:var(--gold-soft); min-height:1.2em; }
+
+  footer{
+    text-align:center; padding:2.4rem 5vw 3rem;
+    color:var(--cream-dim); font-size:0.78rem;
+    border-top:1px solid rgba(246,239,224,0.08);
+  }
+  footer .brand{ justify-content:center; margin-bottom:0.6rem; font-size:1.1rem;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">Bergeson <span class="amp">&amp;</span> The Beast</div>
+  <div class="nav-links">
+    <button data-page="home" class="active">Home</button>
+    <button data-page="parks">Travel Options</button>
+    <button data-page="contact">Contact</button>
+  </div>
+</nav>
+
+<!-- ============= HOME ============= -->
+<section id="page-home" class="page active">
+  <div id="hero">
+    <div id="starfield"></div>
+    <div class="moon"></div>
+    <div id="fireworks"></div>
+
+    <div class="hero-content">
+      <div class="eyebrow">Please Stay Tuned — Something Magical Is On The Horizon</div>
+      <h1>Every Trip Deserves a Little <em>Magic</em></h1>
+      <p class="hero-sub">We're exploring an exciting new opportunity to help families plan unforgettable vacations! Stay tuned as we work toward making your vacation planning experience even easier, more personal, and full of magic.</p>
+      <div class="cta-row">
+        <button class="btn btn-solid" data-page="parks">Explore Your Options</button>
+        <button class="btn btn-ghost" data-page="contact">Start Planning</button>
+      </div>
+    </div>
+
+    <div id="castle-wrap">
+      <svg viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg">
+        <!-- hill silhouette -->
+        <path d="M0,420 L0,340 Q150,300 300,330 T600,320 T900,340 L900,420 Z" fill="#050812"/>
+        <!-- side towers -->
+        <g fill="#171233">
+          <rect x="90" y="250" width="46" height="130" rx="4"/>
+          <polygon points="90,250 113,205 136,250"/>
+          <rect x="720" y="250" width="46" height="130" rx="4"/>
+          <polygon points="720,250 743,205 766,250"/>
+          <rect x="200" y="220" width="40" height="160" rx="4"/>
+          <polygon points="200,220 220,180 240,220"/>
+          <rect x="620" y="220" width="40" height="160" rx="4"/>
+          <polygon points="620,220 640,180 660,220"/>
+        </g>
+        <!-- central keep -->
+        <g fill="#1e1840">
+          <rect x="330" y="230" width="240" height="160" rx="6"/>
+          <rect x="360" y="150" width="60" height="110" rx="4"/>
+          <polygon points="360,150 390,100 420,150"/>
+          <rect x="480" y="150" width="60" height="110" rx="4"/>
+          <polygon points="480,150 510,100 540,150"/>
+          <rect x="420" y="90" width="60" height="150" rx="4"/>
+          <polygon points="420,90 450,30 480,90"/>
+          <circle cx="450" cy="16" r="5" fill="#e8b94a"/>
+          <rect x="447" y="8" width="6" height="14" fill="#e8b94a"/>
+        </g>
+        <!-- gate -->
+        <path d="M430,390 Q450,340 470,390 Z" fill="#050812"/>
+        <!-- windows (glow) -->
+        <g class="glow-window" fill="#f2d488">
+          <rect x="378" y="180" width="10" height="16" rx="2"/>
+          <rect x="498" y="180" width="10" height="16" rx="2"/>
+          <rect x="438" y="130" width="10" height="16" rx="2"/>
+          <rect x="360" y="270" width="10" height="14" rx="2"/>
+          <rect x="410" y="270" width="10" height="14" rx="2"/>
+          <rect x="470" y="270" width="10" height="14" rx="2"/>
+          <rect x="520" y="270" width="10" height="14" rx="2"/>
+          <rect x="105" y="290" width="8" height="12" rx="2"/>
+          <rect x="733" y="290" width="8" height="12" rx="2"/>
+        </g>
+      </svg>
+    </div>
+    <div class="scroll-cue">Scroll ✦ Explore</div>
+  </div>
+</section>
+
+<!-- ============= PARKS ============= -->
+<section id="page-parks" class="page">
+  <div id="parks" class="section" style="min-height:70vh; display:flex; align-items:center;">
+    <div class="section-head" style="max-width:680px;">
+      <div class="eyebrow">Coming Soon</div>
+      <h2>Working On Our Magic</h2>
+      <p>We're exploring an exciting new opportunity to help families plan unforgettable vacations!
+      Stay tuned as we work toward making your future vacation planning experience even easier,
+      more personal, and full of magic.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============= CONTACT ============= -->
+<section id="page-contact" class="page">
+  <div id="contact" class="section">
+    <div class="contact-wrap">
+      <div class="contact-info">
+        <div class="eyebrow">Let's Plan</div>
+        <h2>Tell Us About Your Trip</h2>
+        <p>Share a few details about who's coming, when you're hoping to go, and what kind of
+        magic you're after — parks, cruise, or both. We'll get back to you with ideas
+        and a rough budget. We're an independent, fan-made planning service and are not
+        affiliated with, endorsed by, or sponsored by Disney or any other theme park or resort operator.</p>
+        <div style="display:flex; flex-direction:column; align-items:flex-start; gap:0.7rem;">
+          <div class="email-pill">✉ BergesonandtheBeast@gmail.com</div>
+          <div class="email-pill">☎ 515-297-1655</div>
+          <div class="email-pill">☎ 660-216-1789</div>
+        </div>
+      </div>
+
+      <form id="contact-form">
+        <input type="hidden" name="access_key" value="PASTE_YOUR_WEB3FORMS_ACCESS_KEY_HERE">
+        <input type="hidden" name="subject" value="New Disney Trip Request — Bergeson & The Beast">
+        <div class="row-2">
+          <div class="field">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" required placeholder="IE Ryan">
+          </div>
+          <div class="field">
+            <label for="email">Your Email</label>
+            <input type="email" id="email" required placeholder="you@example.com">
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label for="destination">Interested In</label>
+            <select id="destination">
+              <option>Not sure yet</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="travelers">Number of Travelers</label>
+            <input type="number" id="travelers" min="1" placeholder="4">
+          </div>
+        </div>
+        <div class="field">
+          <label for="message">Tell Us More</label>
+          <textarea id="message" placeholder="Rough dates, budget, must-do's..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-solid" style="width:100%;">Send Request</button>
+        <p class="submit-note">Requests are sent straight to BergesonandtheBeast@gmail.com — no email app required.</p>
+        <div id="form-status"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="brand" style="justify-content:center;">Bergeson <span class="amp">&amp;</span> The Beast</div>
+  <div>An independent, fan-made travel planning site. Not affiliated with, endorsed by, or sponsored by any theme park or resort operator.</div>
+</footer>
+
+<script>
+// ---------- NAV ----------
+const pages = document.querySelectorAll('.page');
+const navBtns = document.querySelectorAll('[data-page]');
+function showPage(name){
+  pages.forEach(p => p.classList.toggle('active', p.id === 'page-' + name));
+  document.querySelectorAll('.nav-links button').forEach(b => b.classList.toggle('active', b.dataset.page === name));
+  window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+}
+navBtns.forEach(btn => btn.addEventListener('click', () => showPage(btn.dataset.page)));
+
+// ---------- STARFIELD ----------
+const starfield = document.getElementById('starfield');
+const STAR_COUNT = 140;
+for(let i=0;i<STAR_COUNT;i++){
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2 + 1;
+  s.style.width = size + 'px';
+  s.style.height = size + 'px';
+  s.style.left = Math.random()*100 + '%';
+  s.style.top = Math.random()*70 + '%';
+  s.style.animationDuration = (Math.random()*3 + 2) + 's';
+  s.style.animationDelay = (Math.random()*4) + 's';
+  starfield.appendChild(s);
+}
+
+// ---------- FIREWORKS ----------
+const fireworksEl = document.getElementById('fireworks');
+const colors = ['#e8b94a','#f2d488','#7c2d3b','#f6efe0','#c98fa0'];
+
+function launchFirework(){
+  const cx = 15 + Math.random()*70; // vw percent
+  const cy = 10 + Math.random()*35; // vh percent
+  const color = colors[Math.floor(Math.random()*colors.length)];
+  const sparkCount = 14 + Math.floor(Math.random()*8);
+  for(let i=0;i<sparkCount;i++){
+    const spark = document.createElement('div');
+    spark.className = 'spark';
+    const angle = (Math.PI * 2 * i) / sparkCount;
+    const dist = 40 + Math.random()*50;
+    const dx = Math.cos(angle) * dist;
+    const dy = Math.sin(angle) * dist;
+    spark.style.setProperty('--dx', dx + 'px');
+    spark.style.setProperty('--dy', dy + 'px');
+    spark.style.left = cx + '%';
+    spark.style.top = cy + '%';
+    const size = 3 + Math.random()*3;
+    spark.style.width = size + 'px';
+    spark.style.height = size + 'px';
+    spark.style.background = color;
+    spark.style.boxShadow = '0 0 8px 2px ' + color;
+    fireworksEl.appendChild(spark);
+    setTimeout(() => spark.remove(), 1500);
+  }
+}
+setInterval(launchFirework, 1400);
+setTimeout(launchFirework, 400);
+
+// ---------- CONTACT FORM (mailto) ----------
+const form = document.getElementById('contact-form');
+const statusEl = document.getElementById('form-status');
+const ACCESS_KEY_PLACEHOLDER = 'PASTE_YOUR_WEB3FORMS_ACCESS_KEY_HERE';
+
+form.addEventListener('submit', async function(e){
+  e.preventDefault();
+
+  const accessKey = form.querySelector('[name="access_key"]').value;
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const dest = document.getElementById('destination').value;
+  const travelers = document.getElementById('travelers').value;
+  const message = document.getElementById('message').value.trim();
+
+  // Fallback: if no Web3Forms key has been set up yet, use mailto so nothing breaks.
+  if(!accessKey || accessKey === ACCESS_KEY_PLACEHOLDER){
+    const subject = 'Disney Trip Request from ' + name;
+    const body =
+      'Name: ' + name + '\n' +
+      'Email: ' + email + '\n' +
+      'Interested In: ' + dest + '\n' +
+      'Number of Travelers: ' + (travelers || 'Not specified') + '\n\n' +
+      'Message:\n' + (message || '(none)');
+    window.location.href = 'mailto:BergesonandtheBeast@gmail.com?subject=' +
+      encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    statusEl.textContent = 'Opening your email app… (add a Web3Forms key to send silently instead)';
+    return;
+  }
+
+  statusEl.textContent = 'Sending…';
+  try{
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+      body: JSON.stringify({
+        access_key: accessKey,
+        subject: 'New Disney Trip Request — Bergeson & The Beast',
+        name: name,
+        email: email,
+        destination: dest,
+        travelers: travelers || 'Not specified',
+        message: message || '(none)'
+      })
+    });
+    const data = await res.json();
+    if(data.success){
+      statusEl.textContent = 'Sent! We\'ll be in touch soon.';
+      form.reset();
+    } else {
+      statusEl.textContent = 'Something went wrong — please email BergesonandtheBeast@gmail.com directly.';
+    }
+  } catch(err){
+    statusEl.textContent = 'Something went wrong — please email BergesonandtheBeast@gmail.com directly.';
+  }
+});
+</script>
+
+</body>
+</html>
