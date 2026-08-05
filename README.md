@@ -1,2 +1,2 @@
 # BergesonandtheBeast
-We create Disney vacations for others.
+We are an independent travel planning company.
